@@ -137,6 +137,9 @@
                 x += barWidth + 2;
             }
         }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
     </script>
 </body>
 </html>
