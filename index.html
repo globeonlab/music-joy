@@ -11,13 +11,13 @@
     <link rel="icon" href="logo.png" type="image/png">
 
     <style>
-        :root { --primary: #1DB954; --bg: #0b0b0b; --card: #181818; --globeon-blue: #002060; }
+        :root { --primary: #1DB954; --bg: #0b0b0b; --card: #181818; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
         
         .card { background: var(--card); padding: 30px; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #333; position: relative; z-index: 2; }
         
         .logo-img { width: 80px; margin-bottom: 15px; border-radius: 15px; }
-        h2 { color: white; margin-bottom: 25px; font-weight: 800; letter-spacing: 1px; }
+        h2 { color: white; margin-bottom: 25px; font-weight: 800; }
         h2 span { color: var(--primary); }
         
         input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; background: #222; color: white; font-size: 1.1rem; box-sizing: border-box; outline: none; }
@@ -38,7 +38,7 @@
 
         audio { width: 100%; margin-top: 20px; height: 35px; filter: invert(1); opacity: 0.8; }
         
-        #status-text { color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; height: 20px; }
+        #status-text { color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; height: 20px; overflow: hidden; }
         .brand-footer { font-size: 0.7rem; color: #555; margin-top: 15px; }
     </style>
 </head>
@@ -53,7 +53,7 @@
 
     <div class="card" id="player-ui">
         <img src="logo.png" alt="GlobeOn Logo" style="width: 50px; margin-bottom: 10px;">
-        <div id="status-text">اختر ملفاً صوتياً</div>
+        <div id="status-text">جاهز للتشغيل</div>
         
         <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
             <div style="font-size: 1.5rem;">🎵</div>
@@ -76,7 +76,7 @@
         </div>
 
         <audio id="main-player" controls></audio>
-        <div class="brand-footer">GlobeOn Lab © 2026 | Powered by NFC Technology</div>
+        <div class="brand-footer">GlobeOn Lab © 2026</div>
     </div>
 
     <script>
@@ -88,15 +88,28 @@
                 document.getElementById('player-ui').style.display = 'block';
                 canvas = document.getElementById("canvas");
                 ctx = canvas.getContext("2d");
-            } else { alert("رمز الدخول غير صحيح!"); }
+            } else { alert("الرمز غير صحيح!"); }
         }
 
         function playMusic(file, title, artist) {
             const player = document.getElementById('main-player');
             player.src = file;
-            document.getElementById('status-text').innerText = "جاري تشغيل: " + title;
+            document.getElementById('status-text').innerText = "تستمع إلى: " + title;
             player.play();
 
+            // إظهار التحكم في شاشة القفل والإشعارات
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: title,
+                    artist: artist,
+                    album: 'GlobeOn Music',
+                    artwork: [
+                        { src: 'logo.png', sizes: '512x512', type: 'image/png' }
+                    ]
+                });
+            }
+
+            // تشغيل المحلل البصري (Visualizer)
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioCtx.createAnalyser();
@@ -113,15 +126,13 @@
         function draw() {
             requestAnimationFrame(draw);
             analyser.getByteFrequencyData(dataArray);
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let barWidth = (canvas.width / bufferLength) * 2.5;
             let barHeight;
             let x = 0;
-
             for(let i = 0; i < bufferLength; i++) {
                 barHeight = dataArray[i] / 2;
-                ctx.fillStyle = `rgb(29, 185, 84)`; 
+                ctx.fillStyle = `#1DB954`;
                 ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
                 x += barWidth + 2;
             }
