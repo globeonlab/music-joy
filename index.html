@@ -11,16 +11,17 @@
     <style>
         :root { 
             --primary: #bb86fc; 
-            --glass: rgba(255, 255, 255, 0.08);
-            --bg-dark: #121212;
+            --glass-bg: rgba(255, 255, 255, 0.04); 
+            --text-white: #ffffff;
         }
 
-        /* منع التمرير الزائد وضمان التمركز المطلق */
+        /* تهيئة الصفحة لمنع التمرير وضمان التمركز */
         html, body {
             height: 100%;
             margin: 0;
+            padding: 0;
             overflow: hidden;
-            background: var(--bg-dark);
+            background: #000;
         }
 
         body { 
@@ -28,109 +29,116 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* خلفية متحركة بلمسة أنيميشن و Blur من تصميمك */
+        /* الخلفية الملونة المتحركة (صورتك bg.jpg) */
         .bg-container {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: -10%; left: -10%; 
+            width: 120%; height: 120%;
             z-index: -1;
-            background: radial-gradient(circle at 30% 30%, #4a148c, #1a0b2e);
-            overflow: hidden;
+            background: url('bg.jpg') no-repeat center center;
+            background-size: cover;
+            /* أنيميشن زووم وحركة خفيفة لإعطاء حياة للألوان */
+            animation: backgroundFlow 30s ease-in-out infinite alternate;
+            filter: brightness(0.7) contrast(1.1);
         }
 
-        .blob {
-            position: absolute;
-            width: 350px; height: 350px;
-            background: var(--primary);
-            filter: blur(90px);
-            border-radius: 50%;
-            opacity: 0.15;
-            animation: moveBlob 25s infinite alternate;
+        @keyframes backgroundFlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(-2%, -3%); }
         }
 
-        @keyframes moveBlob {
-            0% { transform: translate(-20%, -20%) scale(1); }
-            100% { transform: translate(120%, 90%) scale(1.6); }
-        }
-
-        /* الكارت الزجاجي الاحترافي - نسخة طبق الأصل من تصميمك */
+        /* الكارت الزجاجي الاحترافي */
         .glass-card { 
-            background: var(--glass);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 32px;
-            padding: 2.5rem;
+            border-radius: 40px;
+            padding: 3rem;
             width: 88vw;
-            max-width: 370px;
-            max-height: 85vh; /* يمنع الخروج عن الشاشة في الـ Landscape */
+            max-width: 380px;
+            max-height: 85vh;
             text-align: center;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
             z-index: 10;
-            overflow-y: auto; /* يسمح بالتمرير داخل الكارت فقط */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
+            overflow-y: auto;
         }
 
-        /* تعديلات الـ Landscape */
+        /* اللوجو الشفاف - PNG */
+        .logo-img { 
+            width: 100px; 
+            margin-bottom: 2rem; 
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.25));
+        }
+
+        /* العناوين والنصوص بيضاء تماماً وواضحة */
+        h2 { 
+            color: var(--text-white); 
+            font-weight: 200; 
+            margin-bottom: 2rem; 
+            font-size: 1.7rem; 
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        h2 span { font-weight: 800; }
+
+        input { 
+            width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 15px; 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            background: rgba(255, 255, 255, 0.08); 
+            color: var(--text-white); 
+            text-align: center; font-size: 1.1rem; 
+            outline: none; box-sizing: border-box;
+        }
+        input::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+        .login-btn { 
+            background: var(--text-white); 
+            color: #1a0b2e; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            font-size: 1.2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: 0.3s;
+        }
+        .login-btn:active { transform: scale(0.96); }
+
+        /* دعم الـ Landscape */
         @media (orientation: landscape) and (max-height: 500px) {
             .glass-card {
                 flex-direction: row;
                 max-width: 85%;
-                max-height: 80vh;
                 padding: 1.5rem;
-                gap: 25px;
+                gap: 30px;
             }
             .logo-img { width: 70px !important; margin: 0 !important; }
-            h2 { font-size: 1.3rem; margin: 0 !important; }
-            #status-text { display: none; }
+            h2 { font-size: 1.4rem; margin-bottom: 1rem !important; }
         }
-
-        .logo-img { width: 90px; margin-bottom: 2rem; filter: drop-shadow(0 0 10px rgba(187, 134, 252, 0.4)); }
-        h2 { color: #fff; font-weight: 200; margin-bottom: 2rem; font-size: 1.6rem; letter-spacing: 1px; }
-        h2 span { font-weight: 800; color: var(--primary); }
-
-        input { 
-            width: 100%; padding: 14px; margin-bottom: 18px; border-radius: 14px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255,255,255,0.06); color: white; 
-            text-align: center; font-size: 1rem; box-sizing: border-box; transition: 0.2s;
-        }
-        input:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); }
-
-        .login-btn { 
-            background: var(--primary); color: #1a0b2e; border: none; 
-            padding: 14px; border-radius: 50px; cursor: pointer; 
-            font-weight: bold; width: 100%; font-size: 1.2rem; transition: 0.2s;
-            box-shadow: 0 10px 25px rgba(187, 134, 252, 0.35);
-        }
-        .login-btn:active { transform: scale(0.98); opacity: 0.9; }
 
         #player-ui { display: none; }
         .track-box { 
-            background: rgba(255,255,255,0.06); margin: 12px 0; padding: 14px; 
-            border-radius: 18px; cursor: pointer; display: flex; align-items: center; width: 100%; box-sizing: border-box;
-            transition: 0.2s;
+            background: rgba(255,255,255,0.06); margin: 10px 0; padding: 15px; 
+            border-radius: 20px; cursor: pointer; display: flex; align-items: center; width: 100%;
+            box-sizing: border-box;
         }
-        .track-box:hover { background: rgba(255,255,255,0.12); }
-        .track-info { text-align: right; margin-right: 14px; flex-grow: 1; color: #fff; }
-        .track-name { font-weight: bold; font-size: 1rem; display: block; }
-        .artist { color: #bbb; font-size: 0.8rem; }
-
-        canvas { width: 100%; height: 70px; margin-top: 15px; }
-        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(250deg); opacity: 0.6; }
+        .track-info { text-align: right; margin-right: 15px; flex-grow: 1; color: #fff; }
+        canvas { width: 100%; height: 60px; margin-top: 10px; }
+        audio { width: 100%; margin-top: 15px; filter: invert(1); opacity: 0.5; }
     </style>
 </head>
 <body>
 
-    <div class="bg-container">
-        <div class="blob"></div>
-        <div class="blob" style="animation-delay: -12s; right: 0; background: #311b92;"></div>
-    </div>
+    <div class="bg-container"></div>
 
     <div class="glass-card" id="lock-screen">
         <img src="logo.png" alt="GlobeOn" class="logo-img">
@@ -145,11 +153,7 @@
         <div id="status-text" style="color: var(--primary); font-size: 0.8rem; margin-bottom: 10px;">Ready to Play</div>
         <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
             <div style="font-size: 1.4rem;">🎵</div>
-            <div class="track-info"><span class="track-name">Rise Up</span><span class="artist">Andra Day</span></div>
-        </div>
-        <div class="track-box" onclick="playMusic('kiana.mp3', 'Come And See Me', 'Kiana Ledé')">
-            <div style="font-size: 1.4rem;">🎧</div>
-            <div class="track-info"><span class="track-name">Come And See Me</span><span class="artist">Kiana Ledé</span></div>
+            <div class="track-info"><strong>Rise Up</strong><br><small>Andra Day</small></div>
         </div>
         <canvas id="canvas"></canvas>
         <audio id="main-player" controls></audio>
@@ -164,7 +168,7 @@
                 document.getElementById('player-ui').style.display = 'block';
                 canvas = document.getElementById("canvas");
                 ctx = canvas.getContext("2d");
-            } else { alert("Wrong Code"); }
+            } else { alert("Wrong Passcode"); }
         }
 
         async function playMusic(file, title, artist) {
@@ -182,7 +186,8 @@
             player.play();
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
-                    title: title, artist: artist, artwork: [{ src: 'logo.png', sizes: '512x512', type: 'image/png' }]
+                    title: title, artist: artist,
+                    artwork: [{ src: 'logo.png', sizes: '512x512', type: 'image/png' }]
                 });
             }
         }
@@ -196,9 +201,9 @@
             let x = 0;
             for(let i = 0; i < dataArray.length; i++) {
                 let barHeight = dataArray[i] / 2;
-                ctx.fillStyle = `rgba(187, 134, 252, 0.85)`;
+                ctx.fillStyle = `rgba(187, 134, 252, 0.8)`;
                 ctx.fillRect(x, canvas.height - barHeight, 3, barHeight);
-                x += 6;
+                x += 7;
             }
         }
     </script>
