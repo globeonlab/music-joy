@@ -3,38 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Joy 🎵</title>
+    <title>Music Joy Pro 🎵</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #121212; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: #1e1e1e; padding: 25px; border-radius: 25px; text-align: center; width: 85%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid #333; }
-        h2 { color: #1DB954; margin-bottom: 20px; font-size: 1.8rem; }
-        input { width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 12px; border: none; text-align: center; font-size: 1.1rem; background: #282828; color: white; outline: none; }
-        button.login-btn { background: #1DB954; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; transition: 0.3s; }
+        :root { --primary: #1DB954; --bg: #0b0b0b; --card: #181818; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        
+        .card { background: var(--card); padding: 30px; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #333; position: relative; z-index: 2; }
+        
+        h2 { color: var(--primary); margin-bottom: 25px; font-weight: 800; letter-spacing: 1px; }
+        
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; background: #222; color: white; font-size: 1.1rem; box-sizing: border-box; }
+        
+        .login-btn { background: var(--primary); color: black; border: none; padding: 15px; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3); }
+
         #player-ui { display: none; }
-        .track-box { background: #282828; margin: 15px 0; padding: 18px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #333; text-align: right; display: flex; align-items: center; }
-        .track-box:hover { background: #333; border-color: #1DB954; }
-        .icon { font-size: 1.5rem; margin-left: 15px; }
-        .track-info { display: flex; flex-direction: column; }
-        .track-name { font-weight: bold; font-size: 1rem; color: #fff; }
-        .artist { font-size: 0.85rem; color: #b3b3b3; margin-top: 4px; }
-        audio { width: 100%; margin-top: 25px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
-        #now-playing { color: #1DB954; font-size: 0.9rem; margin-bottom: 15px; font-weight: bold; }
+
+        /* ستايل قائمة الأغاني */
+        .track-box { background: rgba(255,255,255,0.05); margin: 12px 0; padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; border: 1px solid transparent; }
+        .track-box:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); transform: translateY(-3px); }
+        .track-info { text-align: right; margin-right: 15px; flex-grow: 1; }
+        .track-name { display: block; font-weight: bold; font-size: 1rem; }
+        .artist { font-size: 0.8rem; color: #b3b3b3; }
+
+        /* منطقة السبكتروم (الموجات) */
+        #visualizer-container { width: 100%; height: 100px; margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 15px; overflow: hidden; }
+        canvas { width: 100%; height: 100%; }
+
+        audio { width: 100%; margin-top: 20px; height: 35px; filter: invert(1); opacity: 0.8; }
+        
+        #status-text { color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; height: 20px; }
     </style>
 </head>
 <body>
 
     <div class="card" id="lock-screen">
-        <h2>Music Joy</h2>
-        <input type="password" id="passwordInput" placeholder="أدخل كلمة السر">
-        <button class="login-btn" onclick="checkPass()">دخول</button>
+        <h2>MUSIC JOY</h2>
+        <input type="password" id="passwordInput" placeholder="رمز الدخول">
+        <button class="login-btn" onclick="checkPass()">فتح الموسيقى</button>
     </div>
 
     <div class="card" id="player-ui">
-        <h2>قائمة الأغاني</h2>
-        <div id="now-playing">اختر أغنية للاستماع</div>
+        <div id="status-text">جاهز للتشغيل</div>
         
         <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
-            <span class="icon">🎵</span>
+            <div style="font-size: 1.5rem;">🎵</div>
             <div class="track-info">
                 <span class="track-name">Rise Up</span>
                 <span class="artist">Andra Day</span>
@@ -42,36 +54,72 @@
         </div>
 
         <div class="track-box" onclick="playMusic('kiana.mp3', 'Come And See Me', 'Kiana Ledé')">
-            <span class="icon">🎧</span>
+            <div style="font-size: 1.5rem;">🎧</div>
             <div class="track-info">
                 <span class="track-name">Come And See Me</span>
                 <span class="artist">Kiana Ledé</span>
             </div>
         </div>
 
+        <div id="visualizer-container">
+            <canvas id="canvas"></canvas>
+        </div>
+
         <audio id="main-player" controls></audio>
-        <p style="font-size: 0.7rem; color: #555; margin-top: 20px;">تم الوصول عبر تقنية NFC بنجاح ✅</p>
     </div>
 
     <script>
-        // دالة التحقق من كلمة السر
+        let audioCtx, source, analyser, canvas, ctx, bufferLength, dataArray;
+
         function checkPass() {
             if(document.getElementById('passwordInput').value === "1234") {
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('player-ui').style.display = 'block';
-            } else {
-                alert("كلمة السر غير صحيحة!");
+                initVisualizer(); // تجهيز المحلل البصري
+            } else { alert("رمز خاطئ!"); }
+        }
+
+        function initVisualizer() {
+            canvas = document.getElementById("canvas");
+            ctx = canvas.getContext("2d");
+            // لا يتم تفعيل الصوت إلا بعد تفاعل المستخدم
+        }
+
+        function playMusic(file, title, artist) {
+            const player = document.getElementById('main-player');
+            player.src = file;
+            document.getElementById('status-text').innerText = "تستمع الآن إلى: " + title;
+            player.play();
+
+            // إعداد المحلل البصري عند أول تشغيل
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                source = audioCtx.createMediaElementSource(player);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                analyser.fftSize = 64; // عدد الأعمدة
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                draw();
             }
         }
 
-        // دالة تشغيل الأغاني من جيت هاب مباشرة
-        function playMusic(fileName, title, artist) {
-            const player = document.getElementById('main-player');
-            const status = document.getElementById('now-playing');
-            
-            player.src = fileName; 
-            status.innerText = "تشغيل: " + title + " - " + artist;
-            player.play();
+        function draw() {
+            requestAnimationFrame(draw);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let barWidth = (canvas.width / bufferLength) * 2.5;
+            let barHeight;
+            let x = 0;
+
+            for(let i = 0; i < bufferLength; i++) {
+                barHeight = dataArray[i] / 2;
+                ctx.fillStyle = `rgb(29, 185, 84)`; // لون Spotify الأخضر
+                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                x += barWidth + 2;
+            }
         }
     </script>
 </body>
