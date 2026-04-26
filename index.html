@@ -13,32 +13,23 @@
     <style>
         :root { --primary: #1DB954; --bg: #0b0b0b; --card: #181818; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
-        
         .card { background: var(--card); padding: 30px; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #333; position: relative; z-index: 2; }
-        
         .logo-img { width: 80px; margin-bottom: 15px; border-radius: 15px; }
         h2 { color: white; margin-bottom: 25px; font-weight: 800; }
         h2 span { color: var(--primary); }
-        
         input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; background: #222; color: white; font-size: 1.1rem; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--primary); }
-        
         .login-btn { background: var(--primary); color: black; border: none; padding: 15px; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3); }
-
         #player-ui { display: none; }
-
         .track-box { background: rgba(255,255,255,0.05); margin: 12px 0; padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; border: 1px solid transparent; }
         .track-box:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); transform: translateY(-3px); }
         .track-info { text-align: right; margin-right: 15px; flex-grow: 1; }
         .track-name { display: block; font-weight: bold; font-size: 1rem; }
         .artist { font-size: 0.8rem; color: #b3b3b3; }
-
         #visualizer-container { width: 100%; height: 100px; margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 15px; overflow: hidden; }
         canvas { width: 100%; height: 100%; }
-
         audio { width: 100%; margin-top: 20px; height: 35px; filter: invert(1); opacity: 0.8; }
-        
-        #status-text { color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; height: 20px; overflow: hidden; }
+        #status-text { color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; height: 20px; }
         .brand-footer { font-size: 0.7rem; color: #555; margin-top: 15px; }
     </style>
 </head>
@@ -53,7 +44,7 @@
 
     <div class="card" id="player-ui">
         <img src="logo.png" alt="GlobeOn Logo" style="width: 50px; margin-bottom: 10px;">
-        <div id="status-text">Ready To Play جاهز للتشغيل</div>
+        <div id="status-text">Ready to play - جاهز للتشغيل</div>
         
         <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
             <div style="font-size: 1.5rem;">🎵</div>
@@ -82,6 +73,11 @@
     <script>
         let audioCtx, source, analyser, canvas, ctx, bufferLength, dataArray;
 
+        // تسجيل ملف الخدمة Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
         function checkPass() {
             if(document.getElementById('passwordInput').value === "1234") {
                 document.getElementById('lock-screen').style.display = 'none';
@@ -91,25 +87,10 @@
             } else { alert("الرمز غير صحيح!"); }
         }
 
-        function playMusic(file, title, artist) {
+        async function playMusic(file, title, artist) {
             const player = document.getElementById('main-player');
-            player.src = file;
-            document.getElementById('status-text').innerText = "تستمع إلى: " + title;
-            player.play();
-
-            // إظهار التحكم في شاشة القفل والإشعارات
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: title,
-                    artist: artist,
-                    album: 'GlobeOn Music',
-                    artwork: [
-                        { src: 'logo.png', sizes: '512x512', type: 'image/png' }
-                    ]
-                });
-            }
-
-            // تشغيل المحلل البصري (Visualizer)
+            
+            // تهيئة AudioContext وتنشيطه عند التفاعل
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioCtx.createAnalyser();
@@ -121,6 +102,25 @@
                 dataArray = new Uint8Array(bufferLength);
                 draw();
             }
+
+            if (audioCtx.state === 'suspended') {
+                await audioCtx.resume();
+            }
+
+            player.src = file;
+            document.getElementById('status-text').innerText = "تستمع إلى: " + title;
+            
+            player.play().then(() => {
+                // تفعيل لوحة التحكم العلوية
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: title,
+                        artist: artist,
+                        album: 'GlobeOn Music',
+                        artwork: [{ src: 'logo.png', sizes: '512x512', type: 'image/png' }]
+                    });
+                }
+            }).catch(e => console.error("Error playing music:", e));
         }
 
         function draw() {
@@ -137,9 +137,6 @@
                 x += barWidth + 2;
             }
         }
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
     </script>
 </body>
 </html>
