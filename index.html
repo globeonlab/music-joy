@@ -10,7 +10,6 @@
         h2 { color: #1DB954; margin-bottom: 20px; font-size: 1.8rem; }
         input { width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 12px; border: none; text-align: center; font-size: 1.1rem; background: #282828; color: white; outline: none; }
         button.login-btn { background: #1DB954; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; transition: 0.3s; }
-        button.login-btn:hover { background: #1ed760; transform: scale(1.02); }
         #player-ui { display: none; }
         .track-box { background: #282828; margin: 15px 0; padding: 18px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #333; text-align: right; display: flex; align-items: center; }
         .track-box:hover { background: #333; border-color: #1DB954; }
@@ -19,23 +18,22 @@
         .track-name { font-weight: bold; font-size: 1rem; color: #fff; }
         .artist { font-size: 0.85rem; color: #b3b3b3; margin-top: 4px; }
         audio { width: 100%; margin-top: 25px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
-        #now-playing { color: #1DB954; font-size: 0.9rem; margin-bottom: 15px; font-weight: bold; height: 20px; }
+        #now-playing { color: #1DB954; font-size: 0.9rem; margin-bottom: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="card" id="lock-screen">
         <h2>Music Joy</h2>
-        <p style="margin-bottom: 20px; opacity: 0.8;">المحتوى مخصص لأصحاب الكارت فقط</p>
         <input type="password" id="passwordInput" placeholder="أدخل كلمة السر">
-        <button class="login-btn" onclick="checkPass()">فتح الألبوم 🔓</button>
+        <button class="login-btn" onclick="checkPass()">دخول</button>
     </div>
 
     <div class="card" id="player-ui">
         <h2>قائمة الأغاني</h2>
-        <div id="now-playing">جاهز للتشغيل...</div>
+        <div id="now-playing">اختر أغنية للاستماع</div>
         
-        <div class="track-box" onclick="playMusic('1dXc7C10JFH-XBV79BjhMQ8nJNu78eKwp', 'Rise Up', 'Andra Day')">
+        <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
             <span class="icon">🎵</span>
             <div class="track-info">
                 <span class="track-name">Rise Up</span>
@@ -43,7 +41,7 @@
             </div>
         </div>
 
-        <div class="track-box" onclick="playMusic('1eeDW914D7PnMXO1U7uNckbVMNBD8-2iq', 'Come And See Me', 'Kiana Ledé')">
+        <div class="track-box" onclick="playMusic('kiana.mp3', 'Come And See Me', 'Kiana Ledé')">
             <span class="icon">🎧</span>
             <div class="track-info">
                 <span class="track-name">Come And See Me</span>
@@ -51,38 +49,30 @@
             </div>
         </div>
 
-        <audio id="main-player" controls preload="auto"></audio>
-        <p style="margin-top: 20px; font-size: 0.7rem; opacity: 0.5;">تم الوصول عبر تقنية NFC بنجاح ✅</p>
+        <audio id="main-player" controls></audio>
+        <p style="font-size: 0.7rem; color: #555; margin-top: 20px;">تم الوصول عبر تقنية NFC بنجاح ✅</p>
     </div>
 
     <script>
-        // كلمة السر الافتراضية، يمكنك تغييرها
-        const SECRET_PASS = "1234";
-
+        // دالة التحقق من كلمة السر
         function checkPass() {
-            const input = document.getElementById('passwordInput').value;
-            if(input === SECRET_PASS) {
+            if(document.getElementById('passwordInput').value === "1234") {
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('player-ui').style.display = 'block';
             } else {
-                alert("عذراً، كلمة السر غير صحيحة.");
+                alert("كلمة السر غير صحيحة!");
             }
         }
 
-        function playMusic(id, title, artist) {
+        // دالة تشغيل الأغاني من جيت هاب مباشرة
+        function playMusic(fileName, title, artist) {
             const player = document.getElementById('main-player');
             const status = document.getElementById('now-playing');
             
-            // الرابط المباشر للبث من جوجل درايف
-            player.src = "https://docs.google.com/uc?export=open&id=" + id;
-            status.innerText = "استماع إلى: " + title;
+            player.src = fileName; 
+            status.innerText = "تشغيل: " + title + " - " + artist;
             player.play();
         }
-
-        // تمكين الدخول بالضغط على زر Enter
-        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') { checkPass(); }
-        });
     </script>
 </body>
 </html>
