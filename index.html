@@ -2,136 +2,161 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>GlobeOn Lab Music 🎵</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4a148c">
+    <meta name="theme-color" content="#1a0b2e">
     <link rel="icon" href="logo.png" type="image/png">
 
     <style>
         :root { 
             --primary: #bb86fc; 
-            --glass: rgba(255, 255, 255, 0.1);
-            --purple-dark: #1a0b2e;
+            --glass: rgba(255, 255, 255, 0.08);
+            --bg-dark: #121212;
+        }
+
+        /* منع التمرير الزائد وضمان التمركز المطلق */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--bg-dark);
         }
 
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
-            margin: 0; 
-            height: 100vh; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* خلفية متحركة بلمسة أنيميشن و Blur من تصميمك */
+        .bg-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 30%, #4a148c, #1a0b2e);
             overflow: hidden;
-            background: linear-gradient(45deg, #1a0b2e, #4a148c, #311b92);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
         }
 
-        /* تحريك الخلفية لتعطي إحساس بالحيوية */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .blob {
+            position: absolute;
+            width: 350px; height: 350px;
+            background: var(--primary);
+            filter: blur(90px);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: moveBlob 25s infinite alternate;
         }
 
-        /* الدوائر المتحركة في الخلفية */
-        .bg-circles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .circle { position: absolute; border-radius: 50%; background: rgba(187, 134, 252, 0.1); filter: blur(50px); animation: move 20s infinite alternate; }
-        @keyframes move { from { transform: translate(0, 0); } to { transform: translate(100px, 100px); } }
+        @keyframes moveBlob {
+            0% { transform: translate(-20%, -20%) scale(1); }
+            100% { transform: translate(120%, 90%) scale(1.6); }
+        }
 
-        /* الكارت الزجاجي - Glassmorphism */
+        /* الكارت الزجاجي الاحترافي - نسخة طبق الأصل من تصميمك */
         .glass-card { 
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 35px;
-            padding: 40px;
-            width: 85%;
-            max-width: 380px;
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 32px;
+            padding: 2.5rem;
+            width: 88vw;
+            max-width: 370px;
+            max-height: 85vh; /* يمنع الخروج عن الشاشة في الـ Landscape */
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-            z-index: 2;
-            transition: 0.5s ease;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+            z-index: 10;
+            overflow-y: auto; /* يسمح بالتمرير داخل الكارت فقط */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
         }
 
-        h2 { color: #fff; font-weight: 300; letter-spacing: 2px; margin-bottom: 30px; }
+        /* تعديلات الـ Landscape */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .glass-card {
+                flex-direction: row;
+                max-width: 85%;
+                max-height: 80vh;
+                padding: 1.5rem;
+                gap: 25px;
+            }
+            .logo-img { width: 70px !important; margin: 0 !important; }
+            h2 { font-size: 1.3rem; margin: 0 !important; }
+            #status-text { display: none; }
+        }
+
+        .logo-img { width: 90px; margin-bottom: 2rem; filter: drop-shadow(0 0 10px rgba(187, 134, 252, 0.4)); }
+        h2 { color: #fff; font-weight: 200; margin-bottom: 2rem; font-size: 1.6rem; letter-spacing: 1px; }
         h2 span { font-weight: 800; color: var(--primary); }
 
-        .logo-img { width: 90px; filter: drop-shadow(0 0 10px rgba(187, 134, 252, 0.5)); margin-bottom: 20px; }
-
         input { 
-            width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 15px; 
-            border: none; background: rgba(255,255,255,0.08); color: white; 
-            text-align: center; outline: none; font-size: 1rem; box-sizing: border-box;
+            width: 100%; padding: 14px; margin-bottom: 18px; border-radius: 14px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255,255,255,0.06); color: white; 
+            text-align: center; font-size: 1rem; box-sizing: border-box; transition: 0.2s;
         }
+        input:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); }
 
         .login-btn { 
             background: var(--primary); color: #1a0b2e; border: none; 
-            padding: 15px 40px; border-radius: 50px; cursor: pointer; 
-            font-weight: bold; width: 100%; font-size: 1.1rem; 
-            box-shadow: 0 10px 20px rgba(187, 134, 252, 0.3);
+            padding: 14px; border-radius: 50px; cursor: pointer; 
+            font-weight: bold; width: 100%; font-size: 1.2rem; transition: 0.2s;
+            box-shadow: 0 10px 25px rgba(187, 134, 252, 0.35);
         }
+        .login-btn:active { transform: scale(0.98); opacity: 0.9; }
 
         #player-ui { display: none; }
-
         .track-box { 
-            background: rgba(255,255,255,0.05); margin: 15px 0; padding: 15px; 
-            border-radius: 20px; cursor: pointer; display: flex; align-items: center;
-            transition: 0.3s; border: 1px solid transparent;
+            background: rgba(255,255,255,0.06); margin: 12px 0; padding: 14px; 
+            border-radius: 18px; cursor: pointer; display: flex; align-items: center; width: 100%; box-sizing: border-box;
+            transition: 0.2s;
         }
-        .track-box:hover { background: rgba(255,255,255,0.12); border-color: var(--primary); }
+        .track-box:hover { background: rgba(255,255,255,0.12); }
+        .track-info { text-align: right; margin-right: 14px; flex-grow: 1; color: #fff; }
+        .track-name { font-weight: bold; font-size: 1rem; display: block; }
+        .artist { color: #bbb; font-size: 0.8rem; }
 
-        .track-info { text-align: right; margin-right: 15px; flex-grow: 1; }
-        .track-name { display: block; font-weight: bold; color: #fff; }
-        .artist { font-size: 0.8rem; color: #bbb; }
-
-        canvas { width: 100%; height: 80px; margin-top: 20px; border-radius: 15px; }
-        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(250deg); opacity: 0.6; }
+        canvas { width: 100%; height: 70px; margin-top: 15px; }
+        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(250deg); opacity: 0.6; }
     </style>
 </head>
 <body>
 
-    <div class="bg-circles">
-        <div class="circle" style="width: 300px; height: 300px; top: -50px; left: -50px;"></div>
-        <div class="circle" style="width: 200px; height: 200px; bottom: 50px; right: -20px; animation-delay: -5s;"></div>
+    <div class="bg-container">
+        <div class="blob"></div>
+        <div class="blob" style="animation-delay: -12s; right: 0; background: #311b92;"></div>
     </div>
 
     <div class="glass-card" id="lock-screen">
         <img src="logo.png" alt="GlobeOn" class="logo-img">
-        <h2>GLOBEON <span>LAB</span></h2>
-        <input type="password" id="passwordInput" placeholder="Passcode">
-        <button class="login-btn" onclick="checkPass()">ENTER LAB</button>
+        <div>
+            <h2>GLOBEON <span>LAB</span></h2>
+            <input type="password" id="passwordInput" placeholder="Passcode">
+            <button class="login-btn" onclick="checkPass()">ENTER</button>
+        </div>
     </div>
 
     <div class="glass-card" id="player-ui">
         <div id="status-text" style="color: var(--primary); font-size: 0.8rem; margin-bottom: 10px;">Ready to Play</div>
-        
         <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
-            <div style="font-size: 1.5rem;">🎵</div>
-            <div class="track-info">
-                <span class="track-name">Rise Up</span>
-                <span class="artist">Andra Day</span>
-            </div>
+            <div style="font-size: 1.4rem;">🎵</div>
+            <div class="track-info"><span class="track-name">Rise Up</span><span class="artist">Andra Day</span></div>
         </div>
-
         <div class="track-box" onclick="playMusic('kiana.mp3', 'Come And See Me', 'Kiana Ledé')">
-            <div style="font-size: 1.5rem;">🎧</div>
-            <div class="track-info">
-                <span class="track-name">Come And See Me</span>
-                <span class="artist">Kiana Ledé</span>
-            </div>
+            <div style="font-size: 1.4rem;">🎧</div>
+            <div class="track-info"><span class="track-name">Come And See Me</span><span class="artist">Kiana Ledé</span></div>
         </div>
-
         <canvas id="canvas"></canvas>
         <audio id="main-player" controls></audio>
     </div>
 
     <script>
         let audioCtx, source, analyser, canvas, ctx, bufferLength, dataArray;
-
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 
         function checkPass() {
             if(document.getElementById('passwordInput').value === "1234") {
@@ -150,9 +175,6 @@
                 source = audioCtx.createMediaElementSource(player);
                 source.connect(analyser);
                 analyser.connect(audioCtx.destination);
-                analyser.fftSize = 64;
-                bufferLength = analyser.frequencyBinCount;
-                dataArray = new Uint8Array(bufferLength);
                 draw();
             }
             if (audioCtx.state === 'suspended') { await audioCtx.resume(); }
@@ -160,23 +182,23 @@
             player.play();
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
-                    title: title, artist: artist, album: 'GlobeOn Music',
-                    artwork: [{ src: 'logo.png', sizes: '512x512', type: 'image/png' }]
+                    title: title, artist: artist, artwork: [{ src: 'logo.png', sizes: '512x512', type: 'image/png' }]
                 });
             }
         }
 
         function draw() {
             requestAnimationFrame(draw);
+            analyser.fftSize = 64;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(dataArray);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let barWidth = (canvas.width / bufferLength) * 2.5;
             let x = 0;
-            for(let i = 0; i < bufferLength; i++) {
+            for(let i = 0; i < dataArray.length; i++) {
                 let barHeight = dataArray[i] / 2;
-                ctx.fillStyle = `rgba(187, 134, 252, ${barHeight/100})`;
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-                x += barWidth + 2;
+                ctx.fillStyle = `rgba(187, 134, 252, 0.85)`;
+                ctx.fillRect(x, canvas.height - barHeight, 3, barHeight);
+                x += 6;
             }
         }
     </script>
