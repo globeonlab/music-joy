@@ -2,74 +2,61 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GlobeOn Lab Music 🎵</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GlobeOn Lab Login</title>
     <style>
-        :root { --primary: #bb86fc; --glass: rgba(255, 255, 255, 0.05); }
-        html, body { height: 100%; margin: 0; overflow: hidden; background: #1a0b2e; }
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; }
-
-        .bg-container {
-            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%; z-index: -1;
-            background: url('bg.jpg') no-repeat center center; background-size: cover;
-            animation: bgMove 20s infinite alternate; filter: blur(8px) brightness(0.7);
-        }
-        @keyframes bgMove { from { transform: scale(1); } to { transform: scale(1.1); } }
-
-        .glass-card { 
-            background: var(--glass); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; padding: 2.5rem;
-            width: 85vw; max-width: 370px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; background-color: #121212; 
+            display: flex; justify-content: center; align-items: center; height: 100vh; 
         }
 
-        .logo-img { width: 90px; margin-bottom: 1.5rem; }
-        h2 { color: #fff; font-weight: 200; margin-bottom: 1.5rem; }
-        h2 span { font-weight: 800; }
+        /* حاوية التصميم - تعتمد على صورتك كخلفية */
+        .design-container {
+            width: 380px; height: 680px; /* مقاسات قريبة من تصاميم الموبايل */
+            background: url('bg_clean.png') no-repeat center center;
+            background-size: contain;
+            position: relative; /* لضبط أماكن العناصر فوقها */
+        }
 
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 12px; border: none; background: rgba(255,255,255,0.08); color: #fff; text-align: center; }
-        .login-btn { background: #fff; color: #1a0b2e; border: none; padding: 12px; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; }
+        /* حقل إدخال الباسورد - مضبوط فوق القفل تماماً */
+        #passwordInput {
+            position: absolute;
+            top: 410px; /* المكان الدقيق من الصورة الدليل */
+            left: 50px; width: 280px; padding: 10px;
+            background: transparent; border: none; color: #fff;
+            text-align: center; font-size: 1rem; outline: none;
+        }
+        #passwordInput::placeholder { color: rgba(255,255,255,0.7); }
 
-        #player-ui { display: none; width: 100%; }
-        .track-box { background: rgba(255,255,255,0.05); margin: 10px 0; padding: 12px; border-radius: 18px; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
-        .track-info { text-align: right; margin-right: 12px; flex-grow: 1; color: #fff; }
-        .track-name { font-weight: bold; display: block; }
+        /* زر تسجيل الدخول - مضبوط فوق الزر الملون تماماً */
+        .login-btn {
+            position: absolute;
+            top: 485px; /* المكان الدقيق من الصورة الدليل */
+            left: 50px; width: 280px; height: 45px;
+            background: transparent; border: none; cursor: pointer;
+            color: #fff; font-weight: bold; font-size: 1.2rem;
+        }
         
-        /* منع تحميل الملف */
-        audio { width: 100%; margin-top: 15px; filter: invert(1); opacity: 0.5; }
+        #player-ui { display: none; text-align: center; color: #fff; }
     </style>
 </head>
 <body>
-    <div class="bg-container"></div>
-    <div class="glass-card" id="lock-screen">
-        <img src="logo.png" alt="GlobeOn" class="logo-img">
-        <h2>GLOBEON <span>LAB</span></h2>
-        <input type="password" id="passwordInput" placeholder="Passcode">
-        <button class="login-btn" onclick="checkPass()">ENTER</button>
+
+    <div class="design-container" id="lock-screen">
+        <input type="password" id="passwordInput" placeholder="Enter password">
+        <button class="login-btn" onclick="checkPass()">Log In</button>
     </div>
 
-    <div class="glass-card" id="player-ui">
-        <div class="track-box" onclick="playMusic('andra.mp3', 'Rise Up', 'Andra Day')">
-            <div style="font-size: 1.2rem;">🎵</div>
-            <div class="track-info"><span class="track-name">Rise Up</span><small>Andra Day</small></div>
+    <div id="player-ui">
         </div>
-        <div class="track-box" onclick="playMusic('kiana.mp3', 'Come And See Me', 'Kiana Ledé')">
-            <div style="font-size: 1.2rem;">🎧</div>
-            <div class="track-info"><span class="track-name">Come And See Me</span><small>Kiana Ledé</small></div>
-        </div>
-        <audio id="main-player" controls controlsList="nodownload" oncontextmenu="return false;"></audio>
-    </div>
 
     <script>
+        // الكود المعتاد للتحقق من الباسورد
         function checkPass() {
             if(document.getElementById('passwordInput').value === "1234") {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('player-ui').style.display = 'block';
-            } else { alert("Wrong Passcode"); }
-        }
-        function playMusic(file, title, artist) {
-            const player = document.getElementById('main-player');
-            player.src = file;
-            player.play();
+                alert("Welcome to GlobeOn Lab");
+            } else { alert("Wrong Password"); }
         }
     </script>
 </body>
