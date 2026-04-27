@@ -2,61 +2,112 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GlobeOn Lab Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GlobeOn Lab Login 🔒</title>
     <style>
+        /* تهيئة الصفحة لمنع التمرير وضمان التمركز المطلق */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* يمنع تحرك الصفحة */
+        }
+
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            margin: 0; background-color: #121212; 
-            display: flex; justify-content: center; align-items: center; height: 100vh; 
+            display: flex; 
+            justify-content: center; /* تمركز أفقي */
+            align-items: center;     /* تمركز رأسي */
+            /* إعادة الروح البربل المتحركة (الأنيميشن) في الخلفية */
+            background: linear-gradient(-45deg, #1a0b2e, #4a148c, #311b92, #6a1b9a);
+            background-size: 400% 400%;
+            animation: gradientMove 18s ease infinite;
         }
 
-        /* حاوية التصميم - تعتمد على صورتك كخلفية */
-        .design-container {
-            width: 380px; height: 680px; /* مقاسات قريبة من تصاميم الموبايل */
-            background: url('bg_clean.png') no-repeat center center;
-            background-size: contain;
-            position: relative; /* لضبط أماكن العناصر فوقها */
+        /* أنيميشن حركة الخلفية بنعومة */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* حقل إدخال الباسورد - مضبوط فوق القفل تماماً */
+        /* الواجهة المركزية الثابتة التي تعتمد على صورتك */
+        .interface-container {
+            width: 90vw; /* عرض نسبي يتناسب مع الشاشات */
+            max-width: 360px; /* أقصى عرض لضمان بقائها كشاشة موبايل */
+            aspect-ratio: 9 / 16; /* نسبة عرض لارتفاع الهاتف القياسية */
+            background: url('1000033671.png') no-repeat center center;
+            background-size: contain; /* تكييف الصورة لتظهر بالكامل دون قص */
+            position: relative; /* لضبط أماكن العناصر الشفافة فوقها */
+            z-index: 10;
+            /* إضافة ظل خفيف لبروز الواجهة من الخلفية */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* ضبط الـ Landscape (الوضع الأفقي) لضمان بقاء التمركز */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .interface-container {
+                max-width: 320px;
+                aspect-ratio: 10 / 16;
+            }
+        }
+
+        /* ضبط أماكن العناصر التفاعلية الشفافة فوق الصورة */
+
+        /* 1. حقل الباسورد فوق منطقة 'Enter Passcode' في الصورة الدليل */
         #passwordInput {
             position: absolute;
-            top: 410px; /* المكان الدقيق من الصورة الدليل */
-            left: 50px; width: 280px; padding: 10px;
-            background: transparent; border: none; color: #fff;
-            text-align: center; font-size: 1rem; outline: none;
+            top: 60.5%; /* المكان الدقيق من الصورة */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            padding: 10px;
+            text-align: center;
+            background: transparent; /* شفاف تماماً لإظهار التصميم */
+            border: none;
+            color: #fff; /* لون النص المدخل والـ placeholder */
+            font-size: 1rem;
+            outline: none;
         }
         #passwordInput::placeholder { color: rgba(255,255,255,0.7); }
 
-        /* زر تسجيل الدخول - مضبوط فوق الزر الملون تماماً */
+        /* 2. زر الدخول الشفاف فوق الزر الملون في الصورة تماماً */
         .login-btn {
             position: absolute;
-            top: 485px; /* المكان الدقيق من الصورة الدليل */
-            left: 50px; width: 280px; height: 45px;
-            background: transparent; border: none; cursor: pointer;
-            color: #fff; font-weight: bold; font-size: 1.2rem;
+            top: 71.5%; /* المكان الدقيق من الصورة */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 45px;
+            background: transparent; /* شفاف لإظهار الزر الملون */
+            border: none;
+            cursor: pointer;
+            color: #fff; /* لون كلمة Log In بيضاء تماماً */
+            font-weight: bold;
+            font-size: 1.1rem;
+            -webkit-tap-highlight-color: transparent; /* يحسن تجربة اللمس على الموبايل */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        
-        #player-ui { display: none; text-align: center; color: #fff; }
+        .login-btn:active { transform: translateX(-50%) scale(0.98); } /* تأثير ضغط بسيط */
     </style>
 </head>
 <body>
 
-    <div class="design-container" id="lock-screen">
+    <div class="interface-container" id="lock-screen">
         <input type="password" id="passwordInput" placeholder="Enter password">
         <button class="login-btn" onclick="checkPass()">Log In</button>
     </div>
 
-    <div id="player-ui">
-        </div>
-
     <script>
         // الكود المعتاد للتحقق من الباسورد
         function checkPass() {
-            if(document.getElementById('passwordInput').value === "1234") {
+            const pass = document.getElementById('passwordInput').value;
+            if(pass === "1234") {
                 alert("Welcome to GlobeOn Lab");
-            } else { alert("Wrong Password"); }
+                // يمكنك توجيه المستخدم لصفحة الأغاني هنا
+            } else if (pass !== "") {
+                alert("Wrong Code");
+            }
         }
     </script>
 </body>
