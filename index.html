@@ -1,111 +1,93 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GlobeOn Lab Login 🔒</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GlobeOn Lab Login</title>
     <style>
-        /* تهيئة الصفحة لمنع التمرير وضمان التمركز المطلق */
         html, body {
-            height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* يمنع تحرك الصفحة */
-        }
-
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            justify-content: center; /* تمركز أفقي */
-            align-items: center;     /* تمركز رأسي */
-            /* إعادة الروح البربل المتحركة (الأنيميشن) في الخلفية */
-            background: linear-gradient(-45deg, #1a0b2e, #4a148c, #311b92, #6a1b9a);
+            min-height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            /* الأنيميشن تم تعديله ليكون واضح جداً ومشرق */
+            background: linear-gradient(-45deg, #ff1744, #4a148c, #311b92, #1a0b2e);
             background-size: 400% 400%;
-            animation: gradientMove 18s ease infinite;
+            animation: gradientMove 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* أنيميشن حركة الخلفية بنعومة */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* الواجهة المركزية الثابتة التي تعتمد على صورتك */
         .interface-container {
-            width: 90vw; /* عرض نسبي يتناسب مع الشاشات */
-            max-width: 360px; /* أقصى عرض لضمان بقائها كشاشة موبايل */
-            aspect-ratio: 9 / 16; /* نسبة عرض لارتفاع الهاتف القياسية */
-            background: url('1000033671.png') no-repeat center center;
-            background-size: contain; /* تكييف الصورة لتظهر بالكامل دون قص */
-            position: relative; /* لضبط أماكن العناصر الشفافة فوقها */
+            width: 90vw;
+            max-width: 360px;
+            aspect-ratio: 9 / 16;
+            /* الكود بينادي على الصورة دي، لازم يكون اسمها كده بالظبط في جيت هاب */
+            background: url('bg_clean.png') no-repeat center center;
+            background-size: contain;
+            position: relative;
             z-index: 10;
-            /* إضافة ظل خفيف لبروز الواجهة من الخلفية */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* ضفت حدود خفيفة جداً عشان لو الصورة اتأخرت في التحميل تعرف إن المربع موجود */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
-        /* ضبط الـ Landscape (الوضع الأفقي) لضمان بقاء التمركز */
-        @media (orientation: landscape) and (max-height: 500px) {
-            .interface-container {
-                max-width: 320px;
-                aspect-ratio: 10 / 16;
-            }
-        }
-
-        /* ضبط أماكن العناصر التفاعلية الشفافة فوق الصورة */
-
-        /* 1. حقل الباسورد فوق منطقة 'Enter Passcode' في الصورة الدليل */
         #passwordInput {
             position: absolute;
-            top: 60.5%; /* المكان الدقيق من الصورة */
+            top: 60.5%;
             left: 50%;
             transform: translateX(-50%);
             width: 70%;
             padding: 10px;
             text-align: center;
-            background: transparent; /* شفاف تماماً لإظهار التصميم */
-            border: none;
-            color: #fff; /* لون النص المدخل والـ placeholder */
+            background: rgba(255, 255, 255, 0.05); /* شفافية خفيفة جداً لتمييز المكان */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
             font-size: 1rem;
             outline: none;
         }
+
         #passwordInput::placeholder { color: rgba(255,255,255,0.7); }
 
-        /* 2. زر الدخول الشفاف فوق الزر الملون في الصورة تماماً */
         .login-btn {
             position: absolute;
-            top: 71.5%; /* المكان الدقيق من الصورة */
+            top: 71.5%;
             left: 50%;
             transform: translateX(-50%);
             width: 70%;
             height: 45px;
-            background: transparent; /* شفاف لإظهار الزر الملون */
+            background: transparent;
             border: none;
             cursor: pointer;
-            color: #fff; /* لون كلمة Log In بيضاء تماماً */
+            color: #fff;
             font-weight: bold;
             font-size: 1.1rem;
-            -webkit-tap-highlight-color: transparent; /* يحسن تجربة اللمس على الموبايل */
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        .login-btn:active { transform: translateX(-50%) scale(0.98); } /* تأثير ضغط بسيط */
     </style>
 </head>
 <body>
 
     <div class="interface-container" id="lock-screen">
-        <input type="password" id="passwordInput" placeholder="Enter password">
+        <input type="password" id="passwordInput" placeholder="Enter passcode">
         <button class="login-btn" onclick="checkPass()">Log In</button>
     </div>
 
     <script>
-        // الكود المعتاد للتحقق من الباسورد
         function checkPass() {
             const pass = document.getElementById('passwordInput').value;
             if(pass === "1234") {
                 alert("Welcome to GlobeOn Lab");
-                // يمكنك توجيه المستخدم لصفحة الأغاني هنا
-            } else if (pass !== "") {
+            } else {
                 alert("Wrong Code");
             }
         }
